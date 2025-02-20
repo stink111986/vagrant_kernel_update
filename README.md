@@ -44,6 +44,17 @@ config.vm.network "forwarded_port", guest: 80, host: 8080
 config.vm.network "private_network", ip: "192.168.33.10"
 * публичная сеть
 config.vm.network "public_network"
+#Пример
+# Настройка сети
+  config.vm.network "private_network", ip: "192.168.0.13",
+    netmask: "255.255.255.0",
+    gateway: "192.168.0.10"
+
+  # Настройка DNS
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "nameserver 192.168.0.3" | sudo tee /etc/resolv.conf > /dev/null
+  SHELL
+
 # Синхронизация папок (папка ../data на хосте будет доступна в виртуальной машине по пути /vagrant_data.)
 config.vm.synced_folder "../data", "/vagrant_data"
 # Провайдер
@@ -56,3 +67,9 @@ config.vm.provider "virtualbox" do |vb|
   vb.cpus = "2"
 end
 # Provisioning (настройка виртуальной машины, выполнение команд после создания ВМ)
+
+config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison mc
+  SHELL
+end
