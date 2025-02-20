@@ -26,7 +26,11 @@ vagrant reload
 Конфигурация Vagrantfile
 ******************
 
-
+*******************************
+# Добавление локального образа в Vagrant
+vagrant box add ubuntu-local/jammy64 /home/admin/boxes/ubuntu.box   или   vagrant box add ubuntu-local/jammy64 ~/boxes/ubuntu.box
+#Проверяем что добавили
+vagrant box list
 # Указываем репу от куда брать образ
 ENV['VAGRANT_SERVER_URL'] = 'https://vagrant.elab.pro'
 # какой образ ВМ будет использоваться
@@ -34,6 +38,21 @@ config.vm.box = "ubuntu/jammy64"
 # Проверка обновлений образа По умолчанию она включена.
 config.vm.box_check_update = false
 # Настройка сети
-# config.vm.network "forwarded_port", guest: 80, host: 8080
-# config.vm.network "private_network", ip: "192.168.33.10"
-# config.vm.network "public_network"
+* проброс портов
+config.vm.network "forwarded_port", guest: 80, host: 8080
+* приватная сеть 
+config.vm.network "private_network", ip: "192.168.33.10"
+* публичная сеть
+config.vm.network "public_network"
+# Синхронизация папок (папка ../data на хосте будет доступна в виртуальной машине по пути /vagrant_data.)
+config.vm.synced_folder "../data", "/vagrant_data"
+# Провайдер
+config.vm.provider "virtualbox" do |vb|
+# включить графический интерфейс VirtualBox.
+  vb.gui = true
+# Оперативная память  
+  vb.memory = "1024"
+# Количество процессоров
+  vb.cpus = "2"
+end
+# Provisioning (настройка виртуальной машины, выполнение команд после создания ВМ)
