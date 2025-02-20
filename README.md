@@ -1,25 +1,5 @@
 # vagrant_kernel_update
-____________________________________________
-*GIT*
 
-# создаем репозиторий на git (add README, gitiignore actionscript, license BSD 3)
-# создаем ключ на ПК 		
-ssh-keygen -t ed25519
-# копируем ключ
-cat ~/.ssh/id_rsa.pub
-# добавляем ключ на github в setting  ->  ssh and gpg -> new keygen
-# копируем репозиторий на машину 
-git clone git@github.com:stink111986/vagrant_kernel_update.git
-# Проверить статус репозитория
-git status
-#  Добавить изменения в индекс (README.md это имя файла)
-git add README.md 
-# Добавить все изменения (включая новые файлы)
-git add .
-# Создать коммит
-git commit -m "Описание действий"
-# Отправить изминения
-git push origin main
 ____________________________________________________________________________________________
 *VAGRANT*
 
@@ -41,3 +21,19 @@ vagrant status
 vagrant provision 
 # Перезагрузка виртуальной машины с применением новых конфигураций.vagrant reload
 vagrant reload 
+
+******************
+Конфигурация Vagrantfile
+******************
+
+
+# Указываем репу от куда брать образ
+ENV['VAGRANT_SERVER_URL'] = 'https://vagrant.elab.pro'
+# какой образ ВМ будет использоваться
+config.vm.box = "ubuntu/jammy64"
+# Проверка обновлений образа По умолчанию она включена.
+config.vm.box_check_update = false
+# Настройка сети
+# config.vm.network "forwarded_port", guest: 80, host: 8080
+# config.vm.network "private_network", ip: "192.168.33.10"
+# config.vm.network "public_network"
