@@ -88,4 +88,8 @@ dpkg -i *.deb
 # Перезагрузка системы и проверка версии ядра
 reboot -n 
 
+![old version kernel](https://github.com/user-attachments/assets/34baf086-9f49-4a0d-9f68-8e2826cf5c6f)
 
+
+
+![new version kernel](https://github.com/user-attachments/assets/f96ac18b-812d-4f42-92d8-491e9c4e8564)
