@@ -1,5 +1,5 @@
 # vagrant_kernel_update
-
+Использовал Ubuntu 22.04
 ____________________________________________________________________________________________
 *VAGRANT*
 
@@ -73,3 +73,19 @@ config.vm.provision "shell", inline: <<-SHELL
     apt-get install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison mc
   SHELL
 end
+
+__________________________________________________________________________
+# Обновление Ядра до версии 6.13
+# Проверка версии ядра
+uname -r
+# Загрузка заголовков, модулей и образа ядра Linux
+wget https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-headers-6.13.0-061300-generic_6.13.0-061300.202501302155_amd64.deb 
+wget https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-headers-6.13.0-061300_6.13.0-061300.202501302155_all.deb
+wget https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-image-unsigned-6.13.0-061300-generic_6.13.0-061300.202501302155_amd64.deb
+wget https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-modules-6.13.0-061300-generic_6.13.0-061300.202501302155_amd64.deb
+# Установка ядра
+dpkg -i *.deb
+# Перезагрузка системы и проверка версии ядра
+reboot -n 
+
+
