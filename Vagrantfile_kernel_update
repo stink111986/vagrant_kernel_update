@@ -1,0 +1,46 @@
+Vagrant.configure("2") do |config|
+  # Используем образ Ubuntu 22.04
+  config.vm.box = "ubuntu.box"
+
+  # Настройка сети
+  config.vm.network "public_network", ip: "192.168.0.13",
+    netmask: "255.255.255.0",
+    gateway: "192.168.0.10"
+
+  # Настройка DNS
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "nameserver 192.168.0.3" | sudo tee /etc/resolv.conf > /dev/null
+  SHELL
+
+  # Настройка провайдера (VirtualBox)
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "TEST"  # Имя машины в VirtualBox
+    vb.memory = "1024"  # Выделяем 1 ГБ оперативной памяти
+    vb.cpus = "1"       # Выделяем 1 CPU
+  end
+
+  # Синхронизация папки с хоста в гостевую машину
+  config.vm.synced_folder "D:/OTUS", "/mnt"
+
+  # Автоматически обновляем пакеты и устанавливаем необходимые зависимости
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    
+    # Загрузка пакетов ядра
+    wget https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-headers-6.13.0-061300-generic_6.13.0-061300.202501302155_amd64.deb \
+         https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-headers-6.13.0-061300_6.13.0-061300.202501302155_all.deb \
+         https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-image-unsigned-6.13.0-061300-generic_6.13.0-061300.202501302155_amd64.deb \
+         https://kernel.ubuntu.com/mainline/v6.13/amd64/linux-modules-6.13.0-061300-generic_6.13.0-061300.202501302155_amd64.deb
+
+    # Установка пакетов ядра
+    dpkg -i *.deb
+
+    # Установка зависимостей
+    apt-get install -f -y
+
+    # Перезагрузка для применения нового ядра
+    echo "Перезагрузка через 10 секунд..."
+    sleep 60
+    reboot
+  SHELL
+end
